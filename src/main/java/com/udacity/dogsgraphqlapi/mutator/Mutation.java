@@ -1,6 +1,7 @@
 package com.udacity.dogsgraphqlapi.mutator;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import com.udacity.dogsgraphqlapi.exception.BreedNotFoundException;
 import com.udacity.dogsgraphqlapi.exception.DogNotFoundException;
 import com.udacity.dogsgraphqlapi.model.Dog;
 import com.udacity.dogsgraphqlapi.repository.DogRepository;
@@ -20,14 +21,22 @@ public class Mutation implements GraphQLMutationResolver {
 
     // deleteDogBreed
 
-    public Boolean deleteDogBreed(String breed){
+    public boolean deleteDogBreed(String breed){
+        boolean deleted = false;
         List<Dog> dogs = (List<Dog>) dogRepository.findAll();
+
         for (Dog dog: dogs) {
-            if(dog.getBreed() == breed){
-                dogs.remove(dog.getBreed());
+            if(dog.getBreed().equals(breed)){
+                dogRepository.delete(dog);
+                deleted = true;
             }
         }
-        return true;
+
+        if(!deleted){
+            throw new BreedNotFoundException("Breed not found", breed);
+        }
+
+        return deleted;
     }
 
     // updateDogName
