@@ -1,6 +1,7 @@
 package com.udacity.dogsgraphqlapi.resolver;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import com.udacity.dogsgraphqlapi.exception.DogNotFoundException;
 import com.udacity.dogsgraphqlapi.model.Dog;
 import com.udacity.dogsgraphqlapi.repository.DogRepository;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,13 @@ public class Query implements GraphQLQueryResolver {
         return dogRepository.findAll();
     }
 
-    public Optional<Dog> findDogById(Long id){
-        return dogRepository.findById(id);
+    public Dog findDogById(Long id){
+        Optional<Dog> optionalDog = dogRepository.findById(id);
+        if(optionalDog.isPresent()){
+            Dog dog = optionalDog.get();
+            return dog;
+        } else {
+            throw new DogNotFoundException("Dog not found", id);
+        }
     }
 }
