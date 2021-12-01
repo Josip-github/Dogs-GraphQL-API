@@ -1,0 +1,7 @@
+CREATE TABLE dog(
+    id INTEGER NOT NULL AUTO_INCREMENT,
+    name VARCHAR(55) NOT NULL,
+    breed VARCHAR(55) NOT NULL,
+    origin VARCHAR(55) NOT NULL,
+    PRIMARY KEY (id)
+);
